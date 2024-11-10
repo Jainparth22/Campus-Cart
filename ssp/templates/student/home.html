@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Student Home - CampusCart{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-2">Welcome, {{ current_user.name }}! 👋</h1>
+    <p class="text-center text-muted mb-4">What would you like to order today?</p>
+
+    <!-- Quick Stats -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.cart_items }}</div>
+                <div class="stat-label"><i class="bi bi-cart3"></i> Items in Cart</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.active_orders }}</div>
+                <div class="stat-label"><i class="bi bi-box-seam"></i> Active Orders</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.unread_notifications }}</div>
+                <div class="stat-label"><i class="bi bi-bell"></i> Unread Notifications</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop by Category -->
+    <h2 class="text-center mb-4">Shop by Category</h2>
+    <div class="row g-4 justify-content-center mb-5">
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-header"><i class="bi bi-basket"></i> Grocery</div>
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3" style="font-size: 3rem;">🛒</div>
+                    <h5>Fresh Groceries</h5>
+                    <p class="text-muted flex-grow-1">Get fresh fruits, snacks, beverages and daily essentials delivered
+                        to your hostel.</p>
+                    <a href="{{ url_for('student.grocery') }}" class="btn btn-primary">Browse Grocery</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-header"><i class="bi bi-pencil"></i> Stationery</div>
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3" style="font-size: 3rem;">📝</div>
+                    <h5>Study Essentials</h5>
+                    <p class="text-muted flex-grow-1">Notebooks, pens, highlighters, geometry boxes and all your study
+                        supplies.</p>
+                    <a href="{{ url_for('student.stationary') }}" class="btn btn-primary">Browse Stationery</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-header"><i class="bi bi-printer"></i> Printing</div>
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3" style="font-size: 3rem;">🖨️</div>
+                    <h5>Print Services</h5>
+                    <p class="text-muted flex-grow-1">B&W prints, color prints, binding, lamination and more printing
+                        services.</p>
+                    <a href="{{ url_for('student.printing') }}" class="btn btn-primary">Browse Printing</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <h2 class="text-center mb-4">Quick Actions</h2>
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-bell" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">Notifications</h5>
+                    <a href="{{ url_for('student.notifications') }}" class="btn btn-sm btn-primary mt-2">View All</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-box-seam" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">My Orders</h5>
+                    <a href="{{ url_for('student.orders') }}" class="btn btn-sm btn-primary mt-2">Track Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-person-circle" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">My Profile</h5>
+                    <a href="{{ url_for('student.profile') }}" class="btn btn-sm btn-primary mt-2">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-exclamation-triangle" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">Report Issue</h5>
+                    <a href="{{ url_for('student.report_prblm') }}" class="btn btn-sm btn-primary mt-2">Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
