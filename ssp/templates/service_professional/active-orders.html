@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Active Orders - CampusCart{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-4"><i class="bi bi-box-seam"></i> Active Orders</h1>
+
+  {% if orders %}
+  {% for order in orders %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <h5 class="mb-1">Order #{{ order.id }}</h5>
+          <small class="text-muted">{{ order.user.name }}</small><br>
+          <small class="text-muted">{{ order.order_date.strftime('%d %b %Y') }}</small>
+        </div>
+        <div class="col-md-3">
+          <ul class="list-unstyled small mb-0">
+            {% for item in order.items %}
+            <li>{{ item.product_name }} × {{ item.quantity }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-md-2 text-center">
+          <span
+            class="badge {% if order.status == 'Pending' %}bg-warning text-dark{% elif order.status == 'Accepted' %}bg-info{% else %}bg-primary{% endif %} px-3 py-2">
+            {{ order.status }}
+          </span>
+          {% if order.eta %}<br><small>ETA: {{ order.eta }}</small>{% endif %}
+        </div>
+        <div class="col-md-2 text-center">
+          <strong>₹{{ order.total_price }}</strong>
+        </div>
+        <div class="col-md-2 text-end">
+          {% if order.status in ['Accepted', 'In Progress'] %}
+          <button class="btn btn-success btn-sm" onclick="completeOrder({{ order.id }})">
+            <i class="bi bi-check2-all"></i> Complete
+          </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="card">
+    <div class="card-body empty-state">
+      <i class="bi bi-box-seam"></i>
+      <h4>No active orders</h4>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function completeOrder(id) {
+    if (!confirm('Mark this order as completed?')) return;
+    fetch(`/ssp/complete_order/${id}`, { method: 'POST' })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) location.reload();
+        else alert(data.message);
+      });
+  }
+</script>
+{% endblock %}

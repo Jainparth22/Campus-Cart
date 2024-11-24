@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Profile - Campus Cart</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&family=Old+Standard+TT&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
+    <style>
+        :root {
+            --text-color: #8f3c2d;
+            --background-color: #ffead6;
+            --primary-color: #e07b39;
+            --secondary-color: #886363;
+            --accent-color: #743939;
+        }
+
+        body {
+            font-family: "Old Standard TT", serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Alegreya", serif;
+            color: var(--accent-color);
+        }
+
+        .navbar {
+            background-color: var(--accent-color);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-family: "Alegreya", serif;
+            font-size: 1.8rem;
+            color: var(--background-color) !important;
+        }
+
+        .nav-link {
+            color: var(--background-color) !important;
+            font-family: "Old Standard TT", serif;
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .btn-primary {
+          background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--background-color);
+            transition: all 0.3s ease;
+            padding: 1rem 1rem;
+    border-radius: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 1.5rem;
+            padding: 2rem;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border-radius: 15px 15px 0 0 !important;
+            font-family: "Alegreya", serif;
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background-color: var(--accent-color);
+            color: var(--background-color);
+            padding: 2rem 0;
+            width: 100%;
+            margin-top: 8rem;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .custom-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(224, 123, 57, 0.25);
+        }
+
+        .row {
+            justify-content: center;
+        }
+        /* Dropdown menu style */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Additional style for the dropdown items */
+.dropdown-menu {
+    display: none;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    font-family: "Old Standard TT", serif;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('student.home') }}">Campus Cart</a>
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('ssp.ssp_index') }}">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="manageOrdersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Manage Orders
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="manageOrdersDropdown">
+                    <li><a class="dropdown-item" href="{{ url_for('ssp.order_requests') }}">Order Requests</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('ssp.active_orders') }}">Active Orders</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('ssp.edit_catalog') }}">Edit Catalog</a></li>
+                </ul>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ssp.feedback')}}">Order Statistics</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ssp.profile')}}">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ssp.notifications')}}">Notifications</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
+              </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container mx-auto py-8 px-4">
+      <div class="max-w-4xl mx-auto">
+          <div class="card">
+              <h2 class="text-2xl font-bold">Service Professional Details</h2>
+              <div class="profile-info">
+                  <div class="info-item">
+                      <label class="block text-sm font-medium">Name</label>
+                      <p class="mt-1 text-lg">{{ user.name }}</p>
+                  </div>
+                  <div class="info-item">
+                      <label class="block text-sm font-medium">Email</label>
+                      <p class="mt-1 text-lg">{{ user.email }}</p>
+                  </div>
+                  <div class="info-item">
+                      <label class="block text-sm font-medium">Service Type</label>
+                      <p class="mt-1 text-lg">{{ user.type }}</p>
+                  </div>
+                  
+                  <div class="mt-6">
+                      <a href="{{ url_for('ssp.report') }}" 
+                         class="btn-primary text-decoration-none">
+                          Report a Problem
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+  </main>
+    <script>
+      function updateBlockField() {
+        const type = document.getElementById("type").value;
+        const blockNoField = document.getElementById("block_no");
+        const gender = document.getElementById("gender").value;
+
+        if (type === "dayScholar") {
+          blockNoField.disabled = true;
+          blockNoField.innerHTML =
+            '<option value="not_applicable">Not Applicable</option>';
+        } else if (type === "hosteller") {
+          blockNoField.disabled = false;
+
+          // Populate block numbers based on gender
+          const maleBlocks = ["1", "2", "3", "4", "5", "6", "7", "8"];
+          const femaleBlocks = ["1", "2"];
+          const blocks =
+            gender === "male"
+              ? maleBlocks
+              : gender === "female"
+              ? femaleBlocks
+              : [];
+
+          blockNoField.innerHTML = '<option value="">Select Block No.</option>';
+          blocks.forEach((block) => {
+            const option = document.createElement("option");
+            option.value = block;
+            option.textContent = block;
+            blockNoField.appendChild(option);
+          });
+        } else {
+          blockNoField.disabled = true;
+          blockNoField.innerHTML = '<option value="">Select Block No.</option>';
+        }
+      }
+
+      // Reinitialize block numbers on gender change
+      document
+        .getElementById("gender")
+        .addEventListener("change", updateBlockField);
+    </script>
+    <footer class="footer text-center">
+      <p>&copy; 2024 Campus Cart. All Rights Reserved.</p>
+      <p>
+        <a href="#" class="text-white">Terms of Service</a> |
+        <a href="#" class="text-white">Privacy Policy</a> |
+        <a href="#" class="text-white">Contact Us</a>
+      </p>
+    </footer>
+  </body>
+</html>
+
+
+<!--  <div class="mb-3">
+                            <label for="service_type" class="form-label">Service Type</label>
+                            <select class="form-select" id="service_type" name="service_type" required>
+                                <option value="grocery" {% if current_user.type == 'grocery' %}selected{% endif %}>Grocery</option>
+                                <option value="stationary" {% if current_user.type == 'stationary' %}selected{% endif %}>Stationary</option>
+                                <option value="printing" {% if current_user.type == 'printing' %}selected{% endif %}>Printing</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>  body {
+            font-family: "Itim", cursive;
+            background-color: #2c3e50;
+            color: #f7f1e3;
+        }
+        .navbar {
+            background-color: #34495e;
+        }
+        .logo {
+            color: #f1c40f;
+        }
+        .nav-link {
+            color: #f7f1e3;
+        }
+        .nav-link:hover {
+            color: #f1c40f;
+        }
+        .content-card {
+            background-color: #f7f1e3;
+            color: #2c3e50;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #f1c40f;
+            color: #2c3e50;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #2c3e50;
+            color: #f1c40f;
+        }
+            
+        
+        -->

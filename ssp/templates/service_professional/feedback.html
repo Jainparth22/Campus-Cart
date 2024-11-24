@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Statistics - CampusCart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-graph-up"></i> My Order Statistics</h1>
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #198754;">{{ stats.total_orders }}</div>
+                <div class="stat-label"><i class="bi bi-check-circle"></i> Completed Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: var(--primary-color);">₹{{ stats.total_revenue }}</div>
+                <div class="stat-label"><i class="bi bi-currency-rupee"></i> Total Revenue</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #ffc107;">{{ stats.pending_orders }}</div>
+                <div class="stat-label"><i class="bi bi-hourglass"></i> Pending Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #dc3545;">{{ stats.cancelled_orders }}</div>
+                <div class="stat-label"><i class="bi bi-x-circle"></i> Cancelled Orders</div>
+            </div>
+        </div>
+    </div>
+
+    {% if stats.avg_rating %}
+    <div class="card mt-4 p-4">
+        <h4><i class="bi bi-star-fill text-warning"></i> Customer Ratings</h4>
+        <p class="mb-1">
+            <strong>Average Rating:</strong>
+            <span style="font-size: 1.5rem; color: #f5a623;">
+                {% for i in range(1, 6) %}
+                  {% if i <= stats.avg_rating|int %}★{% else %}☆{% endif %}
+                {% endfor %}
+            </span>
+            <span class="text-muted ms-2">{{ stats.avg_rating }}/5</span>
+        </p>
+        <p class="text-muted small">Based on {{ stats.total_rated }} rating(s)</p>
+    </div>
+    {% else %}
+    <div class="card mt-4 p-4">
+        <h4><i class="bi bi-star text-muted"></i> Customer Ratings</h4>
+        <p class="text-muted">No ratings yet. Ratings appear after students review completed orders.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

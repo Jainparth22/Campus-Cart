@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Order Requests - CampusCart{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-4"><i class="bi bi-inbox"></i> Order Requests</h1>
+
+  {% if orders %}
+  {% for order in orders %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <h5 class="mb-1">Order #{{ order.id }}</h5>
+          <small class="text-muted">by {{ order.user.name }}</small><br>
+          <small class="text-muted">{{ order.order_date.strftime('%d %b %Y, %I:%M %p') }}</small>
+          {% if order.file_path %}
+          <br>
+          <a href="{{ url_for('static', filename='uploads/' + order.file_path) }}" target="_blank"
+             class="btn btn-sm btn-outline-primary mt-1">
+            <i class="bi bi-file-earmark-arrow-down"></i> Download Print File
+          </a>
+          {% endif %}
+        </div>
+        <div class="col-md-3">
+          <strong>Items:</strong>
+          <ul class="list-unstyled small mb-0">
+            {% for item in order.items %}
+            <li>{{ item.product_name }} × {{ item.quantity }} — ₹{{ item.total_price }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-md-2 text-center">
+          <p class="fw-bold" style="color: var(--primary-color); font-size: 1.2rem;">₹{{ order.total_price }}</p>
+          <span class="badge bg-secondary">{{ order.payment_mode }}</span>
+        </div>
+        <div class="col-md-4 text-end">
+          <form action="{{ url_for('ssp.update_order_status', order_id=order.id) }}" method="POST"
+            class="d-flex gap-2 justify-content-end align-items-end">
+            <div>
+              <label class="form-label small">ETA</label>
+              <input type="text" name="eta" class="form-control form-control-sm" placeholder="e.g. 30 mins"
+                style="width: 100px;">
+            </div>
+            <div>
+              <button type="submit" name="status" value="Accepted" class="btn btn-success btn-sm">
+                <i class="bi bi-check-lg"></i> Accept
+              </button>
+              <button type="submit" name="status" value="Rejected" class="btn btn-danger btn-sm">
+                <i class="bi bi-x-lg"></i> Reject
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="card">
+    <div class="card-body empty-state">
+      <i class="bi bi-inbox"></i>
+      <h4>No pending requests</h4>
+      <p>New order requests will appear here.</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

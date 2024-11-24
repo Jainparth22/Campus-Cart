@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Campus Cart</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+    />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;700&family=Old+Standard+TT&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
+    <style>
+        :root {
+            --text-color: #8f3c2d;
+            --background-color: #ffead6;
+            --primary-color: #e07b39;
+            --secondary-color: #886363;
+            --accent-color: #743939;
+        }
+
+        body {
+            font-family: "Old Standard TT", serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Alegreya", serif;
+            color: var(--accent-color);
+        }
+
+        .navbar {
+            background-color: var(--accent-color);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-family: "Alegreya", serif;
+            font-size: 1.8rem;
+            color: var(--background-color) !important;
+        }
+
+        .nav-link {
+            color: var(--background-color) !important;
+            font-family: "Old Standard TT", serif;
+            font-size: 1.1rem;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--background-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border-radius: 15px 15px 0 0 !important;
+            font-family: "Alegreya", serif;
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background-color: var(--accent-color);
+            color: var(--background-color);
+            padding: 2rem 0;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .custom-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(224, 123, 57, 0.25);
+        }
+
+        .row {
+            justify-content: center;
+        }
+        /* Dropdown menu style */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Additional style for the dropdown items */
+.dropdown-menu {
+    display: none;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    font-family: "Old Standard TT", serif;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('student.home') }}">Campus Cart</a>
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('ssp.ssp_index') }}">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="manageOrdersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Manage Orders
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="manageOrdersDropdown">
+                    <li><a class="dropdown-item" href="{{ url_for('ssp.order_requests') }}">Order Requests</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('ssp.active_orders') }}">Active Orders</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('ssp.edit_catalog') }}">Edit Catalog</a></li>
+                </ul>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ssp.feedback')}}">Order Statistics</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ssp.profile')}}">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('ssp.notifications')}}">Notifications</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
+              </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid px-4 py-5">
+      <div class="container mt-5">
+        <h1 class="text-center mb-4">Welcome to Your Dashboard, {{ current_user.name }}</h1>
+      <div class="row g-4 py-5 row-cols-1 row-cols-lg-3 justify-content-center">
+          <div class="col-lg-4 col-md-6 mb-4 content-card">
+              <div class="card shadow border-light">                  
+              <div class="card-header text-center">Order requests</div>
+
+                  <div class="card-body text-center">             
+                      <p class="card-text">Manage orders from students.</p>
+                      <a href="{{ url_for('ssp.order_requests') }}" class="btn btn-primary">Go to Services</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4 content-card">
+              <div class="card shadow border-light">
+                  <div class="card-header text-center">Active Orders</div>
+                  <div class="card-body text-center">             
+                      <p class="card-text">See active orders from students.</p>
+                      <a href="{{ url_for('ssp.active_orders') }}" class="btn btn-primary">Go to Products</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mb-4 content-card">
+              <div class="card shadow border-light">
+                  <div class="card-header text-center">Edit Catalouge</div>
+                  <div class="card-body text-center">             
+                      <p class="card-text">Edit the products and services you offer.</p>
+                      <a href="{{ url_for('ssp.edit_catalog') }}" class="btn btn-primary">Go to Catalouge</a>
+                  </div>
+              </div>
+          </div>
+        
+      </div>
+  
+
+
+
+
+          <!-- Hero Section 4: View Statistics -->
+            <div class="col-12"> 
+                        <div class="card shadow border-light"><div class="card-header text-center">Order Statistics</div>
+                  <div class="card-body text-center">
+                    
+
+                      <p class="card-text">Get an overview of your orders, revenue, and ratings from students.</p>
+                      <a href="{{ url_for('ssp.feedback') }}" class="btn btn-primary">Go to Statistics</a>
+                  </div>
+              </div>
+          </div>
+
+      <!-- Hero Section: Profile Management -->
+          <div class="col-12">
+              <div class="card shadow border-light"><div class="card-header text-center">Profile</div>
+                  <div class="card-body text-center">
+                      <p class="card-text">Update your business profile, including contact details, services, and business information.</p>
+                      <a href="{{ url_for('ssp.profile') }}" class="btn btn-primary">Go to Profile</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+   
+  <footer class="footer text-center">
+    <p>&copy; 2024 Campus Cart. All Rights Reserved.</p>
+    <p>
+        <a href="#" class="text-white">Terms of Service</a> |
+        <a href="#" class="text-white">Privacy Policy</a> |
+        <a href="#" class="text-white">Contact Us</a>
+    </p>
+</footer>
+  </body>
+</html>

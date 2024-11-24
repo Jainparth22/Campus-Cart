@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Report Problem - CampusCart{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h1 class="mb-4"><i class="bi bi-exclamation-triangle"></i> Report a Problem</h1>
+      <div class="card mb-4">
+        <div class="card-header">Submit a Report</div>
+        <div class="card-body">
+          <form action="{{ url_for('ssp.report') }}" method="POST">
+            <div class="mb-3">
+              <textarea class="form-control" name="description" rows="4" required
+                placeholder="Describe the issue..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Submit</button>
+          </form>
+        </div>
+      </div>
+      <h3>Your Reports</h3>
+      {% if reports %}
+      {% for r in reports %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <strong>Report #{{ r.id }}</strong>
+            <span class="badge {% if r.status == 'open' %}bg-warning text-dark{% else %}bg-success{% endif %}">{{
+              r.status }}</span>
+          </div>
+          <p class="mb-1"><strong>You:</strong> {{ r.description }}</p>
+          <p class="mb-0"><strong>Admin:</strong> {{ r.admin_reply }}</p>
+          <small class="text-muted">{{ r.date_reported.strftime('%d %b %Y') }}</small>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="card">
+        <div class="card-body empty-state"><i class="bi bi-check-circle"></i>
+          <h4>No reports</h4>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

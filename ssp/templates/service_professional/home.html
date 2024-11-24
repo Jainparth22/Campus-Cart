@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Service Provider Dashboard - CampusCart{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-2">Welcome, {{ current_user.name }}! 👋</h1>
+    <p class="text-muted mb-4">Manage your orders and catalog</p>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #ffc107;">{{ stats.pending }}</div>
+                <div class="stat-label"><i class="bi bi-hourglass"></i> Pending Requests</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #0dcaf0;">{{ stats.active }}</div>
+                <div class="stat-label"><i class="bi bi-box-seam"></i> Active Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #198754;">{{ stats.completed }}</div>
+                <div class="stat-label"><i class="bi bi-check-circle"></i> Completed</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.catalog }}</div>
+                <div class="stat-label"><i class="bi bi-list-ul"></i> Catalog Items</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-3">Quick Actions</h2>
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-header"><i class="bi bi-inbox"></i> Order Requests</div>
+                <div class="card-body d-flex flex-column">
+                    <p class="flex-grow-1">View and accept/reject incoming student orders.</p>
+                    <a href="{{ url_for('ssp.order_requests') }}" class="btn btn-primary">View Requests</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-header"><i class="bi bi-box-seam"></i> Active Orders</div>
+                <div class="card-body d-flex flex-column">
+                    <p class="flex-grow-1">Track and complete accepted orders.</p>
+                    <a href="{{ url_for('ssp.active_orders') }}" class="btn btn-primary">View Active</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-header"><i class="bi bi-list-ul"></i> Edit Catalog</div>
+                <div class="card-body d-flex flex-column">
+                    <p class="flex-grow-1">Add, edit, or remove items from your catalog.</p>
+                    <a href="{{ url_for('ssp.edit_catalog') }}" class="btn btn-primary">Manage Catalog</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

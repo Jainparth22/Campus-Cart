@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Edit Catalog - CampusCart{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-list-ul"></i> Manage Catalog</h1>
+
+    <!-- Existing Items -->
+    <h3 class="mb-3">Current Items</h3>
+    {% if catalog_items %}
+    <div class="table-responsive mb-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in catalog_items %}
+                <tr id="row-{{ item.id }}">
+                    <td>
+                        <strong>{{ item.item_name }}</strong>
+                        {% if item.description %}<br><small class="text-muted">{{ item.description }}</small>{% endif %}
+                    </td>
+                    <td><span class="badge bg-secondary">{{ item.category }}</span></td>
+                    <td>₹{{ item.price }}</td>
+                    <td>{{ item.stock }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteItem({{ item.id }})"><i
+                                class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card mb-4">
+        <div class="card-body empty-state">
+            <i class="bi bi-list-ul"></i>
+            <h4>No items in catalog</h4>
+            <p>Add items using the form below.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Add New Items -->
+    <div class="card">
+        <div class="card-header"><i class="bi bi-plus-circle"></i> Add New Items</div>
+        <div class="card-body">
+            <form action="{{ url_for('ssp.edit_catalog') }}" method="POST" id="catalogForm">
+                <div id="itemsContainer">
+                    <div class="row g-3 mb-3 item-row">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="item_name[]" placeholder="Item name" required>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="category[]" required>
+                                <option value="grocery">Grocery</option>
+                                <option value="stationery">Stationery</option>
+                                <option value="printing">Printing</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <input type="number" class="form-control" name="item_price[]" placeholder="Price" min="1"
+                                required>
+                        </div>
+                        <div class="col-md-1">
+                            <input type="number" class="form-control" name="stock[]" placeholder="Stock" min="0"
+                                required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="description[]" placeholder="Description">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="url" class="form-control" name="image_url[]" placeholder="Image URL">
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                onclick="this.closest('.item-row').remove()"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary me-2" onclick="addItemRow()"><i class="bi bi-plus"></i>
+                    Add Row</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Items</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function addItemRow() {
+        const container = document.getElementById('itemsContainer');
+        const row = container.querySelector('.item-row').cloneNode(true);
+        row.querySelectorAll('input').forEach(i => i.value = '');
+        container.appendChild(row);
+    }
+
+    function deleteItem(id) {
+        if (!confirm('Delete this catalog item?')) return;
+        fetch(`/ssp/delete_catalog_item/${id}`, { method: 'POST' })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) document.getElementById(`row-${id}`).remove();
+                else alert(data.message);
+            });
+    }
+</script>
+{% endblock %}
