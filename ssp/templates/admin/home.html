@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - CampusCart{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h1>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.total_students }}</div>
+                <div class="stat-label"><i class="bi bi-mortarboard"></i> Students</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.total_sps }}</div>
+                <div class="stat-label"><i class="bi bi-shop"></i> Service Providers</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat">{{ stats.total_orders }}</div>
+                <div class="stat-label"><i class="bi bi-box-seam"></i> Total Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat">₹{{ stats.total_revenue }}</div>
+                <div class="stat-label"><i class="bi bi-currency-rupee"></i> Total Revenue</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #dc3545;">{{ stats.pending_verifications }}</div>
+                <div class="stat-label"><i class="bi bi-person-exclamation"></i> Pending Verifications</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #ffc107;">{{ stats.pending_orders }}</div>
+                <div class="stat-label"><i class="bi bi-hourglass-split"></i> Pending Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #198754;">{{ stats.completed_orders }}</div>
+                <div class="stat-label"><i class="bi bi-check-circle"></i> Completed Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card stat-card">
+                <div class="badge-stat" style="color: #dc3545;">{{ stats.open_reports }}</div>
+                <div class="stat-label"><i class="bi bi-flag"></i> Open Reports</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mb-3">Quick Actions</h2>
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-person-check" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">Verify Users</h5>
+                    <a href="{{ url_for('admin.verify_users') }}" class="btn btn-sm btn-primary mt-2">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-flag" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">Resolve Problems</h5>
+                    <a href="{{ url_for('admin.resolve_problems') }}" class="btn btn-sm btn-primary mt-2">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-box-seam" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">All Orders</h5>
+                    <a href="{{ url_for('admin.all_orders') }}" class="btn btn-sm btn-primary mt-2">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-megaphone" style="font-size: 2rem; color: var(--primary-color);"></i>
+                    <h5 class="mt-2">Send Notification</h5>
+                    <a href="{{ url_for('admin.send_notification') }}" class="btn btn-sm btn-primary mt-2">Send</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

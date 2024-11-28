@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Verify Users - CampusCart Admin{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-person-check"></i> Verify Service Providers</h1>
+
+    <h3 class="mb-3">Pending Verification</h3>
+    {% if unverified %}
+    {% for user in unverified %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h5 class="mb-1">{{ user.name }}</h5>
+                    <small class="text-muted">{{ user.email }}</small>
+                </div>
+                <div class="col-md-3">
+                    <span class="badge bg-info">{{ user.service_type or 'Not specified' }}</span>
+                    <br><small class="text-muted">Registered: {{ user.created_date.strftime('%d %b %Y') }}</small>
+                </div>
+                <div class="col-md-2 text-center">
+                    <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                </div>
+                <div class="col-md-3 text-end">
+                    <form action="{{ url_for('admin.approve_user', user_id=user.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check-lg"></i>
+                            Approve</button>
+                    </form>
+                    <form action="{{ url_for('admin.reject_user', user_id=user.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Reject this user?')"><i class="bi bi-x-lg"></i> Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="card mb-4">
+        <div class="card-body empty-state">
+            <i class="bi bi-check-circle"></i>
+            <h4>No pending verifications</h4>
+            <p>All service providers are verified!</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <h3 class="mb-3 mt-4">Verified Service Providers</h3>
+    {% if verified %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Service Type</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in verified %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.service_type or 'N/A' }}</td>
+                    <td><span class="badge bg-success">Verified</span></td>
+                    <td>{{ user.created_date.strftime('%d %b %Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body empty-state">
+            <i class="bi bi-people"></i>
+            <h4>No verified service providers</h4>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

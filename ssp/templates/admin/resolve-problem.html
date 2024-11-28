@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Resolve Problems - CampusCart Admin{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-flag"></i> Problem Reports</h1>
+
+    <h3 class="mb-3">Open Reports</h3>
+    {% if open_reports %}
+    {% for r in open_reports %}
+    <div class="card mb-3 border-start border-4" style="border-left-color: #dc3545 !important;">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+                <div>
+                    <strong>Report #{{ r.id }}</strong> — <span class="text-muted">by {{ r.user.name }} ({{ r.user.email
+                        }})</span>
+                </div>
+                <span class="badge bg-warning text-dark">Open</span>
+            </div>
+            <p class="mb-3">{{ r.description }}</p>
+            <small class="text-muted d-block mb-3">Reported: {{ r.date_reported.strftime('%d %b %Y, %I:%M %p')
+                }}</small>
+
+            <form action="{{ url_for('admin.reply_report', report_id=r.id) }}" method="POST" class="d-flex gap-2">
+                <input type="text" name="reply" class="form-control" placeholder="Type your reply..." required>
+                <button type="submit" class="btn btn-success"><i class="bi bi-reply"></i> Reply & Resolve</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="card mb-4">
+        <div class="card-body empty-state">
+            <i class="bi bi-check-circle"></i>
+            <h4>No open reports</h4>
+            <p>All problems have been resolved!</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <h3 class="mb-3 mt-4">Resolved Reports</h3>
+    {% if resolved_reports %}
+    {% for r in resolved_reports %}
+    <div class="card mb-2" style="opacity: 0.8;">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+                <strong>Report #{{ r.id }}</strong>
+                <span class="badge bg-success">Resolved</span>
+            </div>
+            <p class="mb-1"><strong>User:</strong> {{ r.description }}</p>
+            <p class="mb-0"><strong>Admin reply:</strong> {{ r.admin_reply }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="card">
+        <div class="card-body empty-state">
+            <i class="bi bi-archive"></i>
+            <h4>No resolved reports</h4>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

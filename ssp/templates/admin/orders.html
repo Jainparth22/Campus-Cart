@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}All Orders - CampusCart Admin{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-box-seam"></i> All Orders</h1>
+    {% if orders %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.user.name }}</td>
+                    <td>{% for item in order.items %}{{ item.product_name }} × {{ item.quantity }}{% if not loop.last
+                        %}, {% endif %}{% endfor %}</td>
+                    <td><strong>₹{{ order.total_price }}</strong></td>
+                    <td>
+                        <span
+                            class="badge {% if order.status == 'Completed' %}bg-success{% elif order.status == 'Pending' %}bg-warning text-dark{% elif order.status == 'Accepted' %}bg-info{% elif order.status == 'Cancelled' %}bg-secondary{% else %}bg-danger{% endif %}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td>{{ order.order_date.strftime('%d %b %Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-body empty-state"><i class="bi bi-box-seam"></i>
+            <h4>No orders yet</h4>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
