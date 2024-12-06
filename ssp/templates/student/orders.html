@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block title %}Orders - CampusCart{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ── Star Rating Widget ── */
+  .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+  .star-rating input[type="radio"] { display: none; }
+  .star-rating label {
+    font-size: 1.6rem; color: #ccc; cursor: pointer;
+    transition: color 0.15s ease, transform 0.1s ease;
+  }
+  .star-rating label:hover,
+  .star-rating label:hover ~ label,
+  .star-rating input[type="radio"]:checked ~ label { color: #f5a623; }
+  .star-rating label:hover { transform: scale(1.2); }
+  /* ── Static star display ── */
+  .stars-display { color: #f5a623; font-size: 1.1rem; letter-spacing: 2px; }
+  .stars-display .empty { color: #ccc; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4"><i class="bi bi-box-seam"></i> My Orders</h1>
+
+    <h3 class="mb-3">Active Orders</h3>
+    {% if orders %}
+    {% for order in orders %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <h5 class="mb-1">Order #{{ order.id }}</h5>
+                    <small class="text-muted">{{ order.order_date.strftime('%d %b %Y, %I:%M %p') }}</small>
+                    {% if order.file_path %}
+                    <br><small><i class="bi bi-paperclip"></i>
+                      <a href="{{ url_for('static', filename='uploads/' + order.file_path) }}" target="_blank">View File</a>
+                    </small>
+                    {% endif %}
+                </div>
+                <div class="col-md-3">
+                    <strong>Items:</strong>
+                    <ul class="list-unstyled mb-0 small">
+                        {% for item in order.items %}
+                        <li>{{ item.product_name }} × {{ item.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-3 text-center">
+                    <!-- Progress Bar -->
+                    {% set progress = 0 %}
+                    {% if order.status == 'Pending' %}{% set progress = 25 %}
+                    {% elif order.status == 'Accepted' %}{% set progress = 50 %}
+                    {% elif order.status == 'In Progress' %}{% set progress = 75 %}
+                    {% elif order.status == 'Completed' %}{% set progress = 100 %}
+                    {% endif %}
+                    <div class="progress mb-1" style="height: 10px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ progress }}%;"
+                            aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted fw-bold">{{ order.status }}</small>
+                    {% if order.eta %}
+                    <br><small class="text-info">ETA: {{ order.eta }}</small>
+                    {% endif %}
+                </div>
+                <div class="col-md-2 text-end">
+                    <p class="fw-bold mb-0" style="color: var(--primary-color); font-size: 1.2rem;">₹{{ order.total_price }}</p>
+                    {% if order.payment_mode == 'Wallet' %}
+                    <span class="badge" style="font-size: 0.7rem; background-color: #6f42c1;">Wallet</span>
+                    {% else %}
+                    <span class="badge bg-secondary" style="font-size: 0.7rem;">COD</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-1 text-end">
+                    {% if order.status == 'Pending' %}
+                    <form action="{{ url_for('student.cancel_order', order_id=order.id) }}" method="POST">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Cancel this order?')">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="card mb-4">
+        <div class="card-body empty-state">
+            <i class="bi bi-box-seam"></i>
+            <h4>No active orders</h4>
+            <p>Your active orders will appear here.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <h3 class="mb-3 mt-4">Past Orders</h3>
+    {% if past_orders %}
+    {% for order in past_orders %}
+    <div class="card mb-3" style="opacity: 0.9;">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <h5 class="mb-1">Order #{{ order.id }}</h5>
+                    <small class="text-muted">{{ order.order_date.strftime('%d %b %Y, %I:%M %p') }}</small>
+                    {% if order.file_path %}
+                    <br><small><i class="bi bi-paperclip"></i>
+                      <a href="{{ url_for('static', filename='uploads/' + order.file_path) }}" target="_blank">View File</a>
+                    </small>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-unstyled mb-0 small">
+                        {% for item in order.items %}
+                        <li>{{ item.product_name }} × {{ item.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2 text-center">
+                    <span class="badge {% if order.status == 'Completed' %}bg-success{% elif order.status == 'Cancelled' %}bg-secondary{% else %}bg-danger{% endif %} px-3 py-2">
+                        {{ order.status }}
+                    </span>
+                </div>
+                <div class="col-md-3 text-end">
+                    <p class="fw-bold mb-1">₹{{ order.total_price }}</p>
+
+                    {% if order.status == 'Completed' and not order.rating %}
+                    <!-- Rate button triggers modal -->
+                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal"
+                        data-bs-target="#rateModal{{ order.id }}">
+                        <i class="bi bi-star"></i> Rate Order
+                    </button>
+
+                    <!-- Star Rating Modal -->
+                    <div class="modal fade" id="rateModal{{ order.id }}" tabindex="-1"
+                         aria-labelledby="rateModalLabel{{ order.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form action="{{ url_for('student.rate_order', order_id=order.id) }}" method="POST">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="rateModalLabel{{ order.id }}">
+                                            <i class="bi bi-star-fill text-warning"></i> Rate Order #{{ order.id }}
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body text-start">
+                                        <label class="form-label fw-semibold mb-2">How was your experience?</label>
+                                        <!-- Interactive Star Rating -->
+                                        <div class="star-rating mb-1" id="stars-{{ order.id }}">
+                                            <input type="radio" name="rating" id="s5-{{ order.id }}" value="5">
+                                            <label for="s5-{{ order.id }}" title="Excellent">★</label>
+                                            <input type="radio" name="rating" id="s4-{{ order.id }}" value="4">
+                                            <label for="s4-{{ order.id }}" title="Good">★</label>
+                                            <input type="radio" name="rating" id="s3-{{ order.id }}" value="3">
+                                            <label for="s3-{{ order.id }}" title="Average">★</label>
+                                            <input type="radio" name="rating" id="s2-{{ order.id }}" value="2">
+                                            <label for="s2-{{ order.id }}" title="Poor">★</label>
+                                            <input type="radio" name="rating" id="s1-{{ order.id }}" value="1" checked>
+                                            <label for="s1-{{ order.id }}" title="Terrible">★</label>
+                                        </div>
+                                        <p class="small text-muted mb-3" id="starLabel-{{ order.id }}">Select a rating above</p>
+                                        <div class="mb-3">
+                                            <label class="form-label">Review <span class="text-muted">(Optional)</span></label>
+                                            <textarea name="review" class="form-control" rows="3"
+                                                placeholder="Tell us about your experience..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-send"></i> Submit Feedback
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% elif order.rating %}
+                    <!-- Show filled gold stars for already-rated orders -->
+                    <div class="stars-display mt-1">
+                        {% for i in range(1, 6) %}
+                          {% if i <= order.rating %}<span>★</span>{% else %}<span class="empty">★</span>{% endif %}
+                        {% endfor %}
+                    </div>
+                    <small class="text-muted">{{ order.rating }}/5 rated</small>
+                    {% if order.review %}
+                    <br><small class="text-muted fst-italic">"{{ order.review }}"</small>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="card">
+        <div class="card-body empty-state">
+            <i class="bi bi-clock-history"></i>
+            <h4>No past orders</h4>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Update star label text dynamically when a star is clicked
+document.querySelectorAll('.star-rating input[type="radio"]').forEach(function(radio) {
+    const labels = ['', 'Terrible 😞', 'Poor 😕', 'Average 😐', 'Good 😊', 'Excellent 🤩'];
+    radio.addEventListener('change', function() {
+        const parts = this.id.split('-');
+        const orderId = parts.slice(1).join('-');
+        const lbl = document.getElementById('starLabel-' + orderId);
+        if (lbl) lbl.textContent = labels[parseInt(this.value)] || '';
+    });
+});
+</script>
+{% endblock %}
