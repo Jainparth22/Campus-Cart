@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: campuscart
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python seed.py
+    startCommand: gunicorn run:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
